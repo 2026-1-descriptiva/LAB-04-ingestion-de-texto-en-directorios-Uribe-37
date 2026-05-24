@@ -8,6 +8,10 @@ import os
 import shutil
 import pandas as pd
 
+output_folder = "files/output"
+if os.path.exists(output_folder):
+    shutil.rmtree(output_folder)
+
 def pregunta_01():
     
     input_folder = "files/input"
@@ -106,6 +110,4 @@ def pregunta_01():
     |  3 | Both operating profit and net sales for the three-month period increased , respectively from EUR16 .0 m and EUR139m , as compared to the corresponding quarter in 2006 | positive |
     |  4 | Tampere Science Parks is a Finnish company that owns , leases and builds office properties and it specialises in facilities for technology-oriented businesses         | neutral  |
     ```
-
-
     """
