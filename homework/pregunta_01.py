@@ -5,12 +5,19 @@
 Escriba el codigo que ejecute la accion solicitada en cada pregunta.
 """
 import os
+import shutil
 import pandas as pd
 
 def pregunta_01():
     
     input_folder = "files/input"
-    output_folder="files/output"    
+    output_folder="files/output"
+    # Si la carpeta output existe, eliminarla
+    if os.path.exists(output_folder):
+        shutil.rmtree(output_folder)
+
+    # Crear nuevamente la carpeta output
+    os.makedirs(output_folder)
     os.makedirs(output_folder, exist_ok=True)
 
     sentiments = ["negative", "positive", "neutral"]
