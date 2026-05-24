@@ -4,11 +4,38 @@
 """
 Escriba el codigo que ejecute la accion solicitada en cada pregunta.
 """
-
+import pandas as pd
+from pathlib import Path
 
 def pregunta_01():
+
+    input_folder = Path("files/input")
+    output_folder = Path("files/output")
+    output_folder.mkdir(parents=True, exist_ok=True)
+
+    sentiments = ["negative", "positive", "neutral"]
+
+    for dataset in ["train", "test"]:
+        data = []
+
+        for sentiment in sentiments:
+            folder = input_folder / dataset / sentiment
+
+            for file_path in sorted(folder.glob("*.txt")):
+                phrase = file_path.read_text(encoding="utf-8").strip()
+
+                data.append({
+                    "phrase": phrase,
+                    "target": sentiment
+                })
+
+        df = pd.DataFrame(data)
+
+        output_file = output_folder / f"{dataset}_dataset.csv"
+        df.to_csv(output_file, index=False, encoding="utf-8")
+
     """
-    La información requerida para este laboratio esta almacenada en el
+    La información requerida para este laboratorio esta almacenada en el
     archivo "files/input.zip" ubicado en la carpeta raíz.
     Descomprima este archivo.
 
