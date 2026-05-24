@@ -6,23 +6,38 @@ Escriba el codigo que ejecute la accion solicitada en cada pregunta.
 """
 import os
 import shutil
+import zipfile
 import pandas as pd
 
-output_folder = "files/output"
-if os.path.exists(output_folder):
-    shutil.rmtree(output_folder)
-
 def pregunta_01():
-    
-    input_folder = "files/input"
-    output_folder="files/output"
-    # Si la carpeta output existe, eliminarla
+
+    zip_file = "files/input.zip"
+    output_folder = "files/output"
+    extract_folder = "files/input_extracted"
+
+    # Si output existe, eliminarla
     if os.path.exists(output_folder):
         shutil.rmtree(output_folder)
 
-    # Crear nuevamente la carpeta output
+    # Crear output limpia
     os.makedirs(output_folder)
-    os.makedirs(output_folder, exist_ok=True)
+
+    # Si ya existe una extracción anterior, eliminarla
+    if os.path.exists(extract_folder):
+        shutil.rmtree(extract_folder)
+
+    # Crear carpeta temporal para extraer el zip
+    os.makedirs(extract_folder)
+
+    # Extraer input.zip
+    with zipfile.ZipFile(zip_file, "r") as zip_ref:
+        zip_ref.extractall(extract_folder)
+
+    # Detectar si el zip contiene una carpeta llamada input
+    if os.path.exists(os.path.join(extract_folder, "input")):
+        input_folder = os.path.join(extract_folder, "input")
+    else:
+        input_folder = extract_folder
 
     sentiments = ["negative", "positive", "neutral"]
 
