@@ -4,14 +4,15 @@
 """
 Escriba el codigo que ejecute la accion solicitada en cada pregunta.
 """
+import os
 import pandas as pd
-from pathlib import Path
 
 def pregunta_01():
 
-    input_folder = Path("files/input")
-    output_folder = Path("files/output")
-    output_folder.mkdir(parents=True, exist_ok=True)
+    input_folder = "files/input"
+    output_folder = "files/output"
+
+    os.makedirs(output_folder, exist_ok=True)
 
     sentiments = ["negative", "positive", "neutral"]
 
@@ -19,19 +20,26 @@ def pregunta_01():
         data = []
 
         for sentiment in sentiments:
-            folder = input_folder / dataset / sentiment
+            folder = os.path.join(input_folder, dataset, sentiment)
 
-            for file_path in sorted(folder.glob("*.txt")):
-                phrase = file_path.read_text(encoding="utf-8").strip()
+            if not os.path.exists(folder):
+                continue
 
-                data.append({
-                    "phrase": phrase,
-                    "target": sentiment
-                })
+            for filename in sorted(os.listdir(folder)):
+                if filename.endswith(".txt"):
+                    file_path = os.path.join(folder, filename)
+
+                    with open(file_path, "r", encoding="utf-8") as file:
+                        phrase = file.read().strip()
+
+                    data.append({
+                        "phrase": phrase,
+                        "target": sentiment
+                    })
 
         df = pd.DataFrame(data)
 
-        output_file = output_folder / f"{dataset}_dataset.csv"
+        output_file = os.path.join(output_folder, f"{dataset}_dataset.csv")
         df.to_csv(output_file, index=False, encoding="utf-8")
 
     """
